@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const clientAuth = require('../middlewares/clientAuth');
 
-const { createTask } = require('../controllers/taskController');
+const { createTask, fetchTasks } = require('../controllers/taskController');
 
-router.post('/create', clientAuth, createTask);
+router.post('/createTask', clientAuth, createTask);
+router.get('/fetchTasks', clientAuth, fetchTasks);
 
 module.exports = router;
