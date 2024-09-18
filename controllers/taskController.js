@@ -55,6 +55,18 @@ exports.fetchTasks = async (req, res) => {
             return handleErrorResponse(res, 404, 'User not found');
         }
 
+        const currentDate = new Date();
+        await context.task.updateMany(
+            {
+                userId: foundUser._id,
+                date: { $lt: currentDate },
+                isCompleted: false
+            },
+            {
+                $set: { isCompleted: true }
+            }
+        );
+
         const taskLists = await context.task.aggregate([
             {
                 $match: {
@@ -65,10 +77,11 @@ exports.fetchTasks = async (req, res) => {
 
         return res.status(200).json(taskLists);
     } catch (error) {
-        console.error('fetchUserProfile error:', error);
+        console.error('fetchTasks error:', error);
         return handleErrorResponse(res, 401, 'Invalid token', error);
     }
 };
+
 
 exports.deleteTask = async (req, res) => {
     try {
