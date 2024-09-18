@@ -17,7 +17,7 @@ app.use(express.urlencoded({
     limit: '50mb'
 }));
 app.use(express.json({ limit: '50mb' }));
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'https://metromindz-client.vercel.app', credentials: true }));
 app.use(cookieParser());
 
 // User routes
