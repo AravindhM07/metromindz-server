@@ -6,10 +6,10 @@ const handleErrorResponse = (res, status, message, error = null) => {
     return res.status(status).json({ message, ...(error && { error: error.message }) });
 };
 
-exports.createTask = async (req, res) => {
+exports.handleSaveTask = async (req, res) => {
     try {
         const token = req.cookies.token;
-        const { title, details, date, priority } = req.body;
+        const { id, title, details, date, priority } = req.body;
         if (!title || !details || !date || !priority) {
             return handleErrorResponse(res, 400, 'All fields are required.');
         }
@@ -21,18 +21,22 @@ exports.createTask = async (req, res) => {
             return handleErrorResponse(res, 404, 'User not found');
         }
 
-        await new context.task({
-            userId: foundUser._id,
-            title,
-            details,
-            date,
-            priority
-        }).save();
+        if (id) {
+            await context.task.findByIdAndUpdate(id, { title, details, date, priority });
+        } else {
+            await new context.task({
+                userId: foundUser._id,
+                title,
+                details,
+                date,
+                priority
+            }).save();
+        }
 
-        return res.status(200).json({ message: 'Task created successfully!' });
+        return res.status(200).json({ message: 'Task saved successfully!' });
     } catch (error) {
         console.error('createTask error:', error);
-        return handleErrorResponse(res, 500, 'Error occurred while creating task', error);
+        return handleErrorResponse(res, 500, 'Error occurred while save task', error);
     }
 };
 
