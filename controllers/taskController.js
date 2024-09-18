@@ -65,3 +65,22 @@ exports.fetchTasks = async (req, res) => {
         return handleErrorResponse(res, 401, 'Invalid token', error);
     }
 };
+
+exports.deleteTask = async (req, res) => {
+    try {
+        const { id } = req.query;
+
+        if (!id) {
+            return res.status(400).json({ message: 'Request ID is required.' });
+        }
+        const deleteResult = await context.task.deleteOne({ _id: id });
+
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).json({ message: 'Task request not found.' });
+        }
+
+        return res.status(200).json({ message: 'Request deleted successfully!' });
+    } catch (error) {
+        return handleErrorResponse(res, 500, 'Error occurred while deleting request.', error);
+    }
+};
