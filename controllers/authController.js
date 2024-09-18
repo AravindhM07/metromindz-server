@@ -10,7 +10,7 @@ exports.createUser = async (req, res) => {
     try {
         const { name, email, password, image } = req.body;
 
-        if (!name || !email || !password || !image ) {
+        if (!name || !email || !password || !image) {
             return handleErrorResponse(res, 400, 'All fields are required.');
         }
 
