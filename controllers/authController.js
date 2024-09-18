@@ -54,8 +54,8 @@ exports.fetchUserProfile = async (req, res) => {
 
     try {
         const { id: userId } = jwt.verify(token, process.env.JWT_SECRET);
+        const foundUser = await context.user.findById(userId).select('-password -image');
 
-        const foundUser = await context.user.findById(userId).select('-password');
         if (!foundUser) {
             return handleErrorResponse(res, 404, 'User not found');
         }
@@ -66,6 +66,7 @@ exports.fetchUserProfile = async (req, res) => {
         return handleErrorResponse(res, 401, 'Invalid token', error);
     }
 };
+
 
 exports.login = async (req, res) => {
     try {
