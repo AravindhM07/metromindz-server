@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { context } = require('../models/index');
-const { mongo, default: mongoose } = require('mongoose');
+const { default: mongoose } = require('mongoose');
 
 const handleErrorResponse = (res, status, message, error = null) => {
     return res.status(status).json({ message, ...(error && { error: error.message }) });

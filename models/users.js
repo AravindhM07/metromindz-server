@@ -7,4 +7,6 @@ const userSchema = new mongoose.Schema({
     profile: { type: String, required: true },
 }, { timestamps: true });
 
+userSchema.index({ name: 1 });
+
 module.exports = userSchema;
