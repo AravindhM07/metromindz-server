@@ -10,7 +10,7 @@ exports.handleSaveTask = async (req, res) => {
     try {
         const token = req.cookies.token;
         const { id, title, details, date, priority } = req.body;
-        if (!title || !details || !date || !priority) {
+        if (!title || !date || !priority) {
             return handleErrorResponse(res, 400, 'All fields are required.');
         }
 
@@ -56,17 +56,19 @@ exports.fetchTasks = async (req, res) => {
         }
 
         const currentDate = new Date();
+        const startOfToday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        
         await context.task.updateMany(
             {
                 userId: foundUser._id,
-                date: { $lt: currentDate },
+                date: { $lt: startOfToday },
                 isCompleted: false
             },
             {
                 $set: { isCompleted: true }
             }
         );
-
+        
         const taskLists = await context.task.aggregate([
             {
                 $match: {
