@@ -13,9 +13,4 @@ const taskSchema = new mongoose.Schema({
     isCompleted: { type: Boolean, default: false },
 }, { timestamps: true });
 
-taskSchema.index({ userId: 1 });
-taskSchema.index({ date: 1 });
-taskSchema.index({ userId: 1, date: 1 });
-taskSchema.index({ priority: 1 });
-
 module.exports = taskSchema;
